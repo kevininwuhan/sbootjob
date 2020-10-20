@@ -1,0 +1,1132 @@
+Index: src/main/java/com/xingjob/sbootxjob/entity/xingjobJob.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/entity/xingjobJob.java	(date 1600349480169)
++++ src/main/java/com/xingjob/sbootxjob/entity/xingjobJob.java	(date 1600349480169)
+@@ -0,0 +1,45 @@
++package com.xingjob.sbootxjob.entity;
++
++import com.baomidou.mybatisplus.annotation.FieldFill;
++import com.baomidou.mybatisplus.annotation.IdType;
++import com.baomidou.mybatisplus.annotation.TableField;
++import com.baomidou.mybatisplus.annotation.TableId;
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++import java.util.Date;
++
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++public class xingjobJob {
++    @TableId(value="jobid",type= IdType.AUTO)
++    private Long jobid;
++    private Long uid;
++    private String jobtitle;
++    private Long salary;
++    private String address;
++    private Long edulevel;
++    private String jobdesc;
++    private String longitude;
++    private String latitude;
++    private String addressname;
++    private Byte status;
++    private String email;
++    private String contactphone;
++    private String avatar;
++    private String nickname;
++    private String wechatnum;
++    private String telephone;
++    private String contactname;
++    private String userposition;
++    private String companyname;
++    @TableField(fill= FieldFill.INSERT)
++    private Date addTime;
++    @TableField(fill =FieldFill.INSERT_UPDATE)
++    private Date updateTime;
++
++
++
++}
+Index: src/test/java/com/xingjob/sbootxjob/SbootxjobApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/com/xingjob/sbootxjob/SbootxjobApplicationTests.java	(date 1600169690595)
++++ src/test/java/com/xingjob/sbootxjob/SbootxjobApplicationTests.java	(date 1600169690595)
+@@ -0,0 +1,13 @@
++package com.xingjob.sbootxjob;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++
++@SpringBootTest
++class SbootxjobApplicationTests {
++
++    @Test
++    void contextLoads() {
++    }
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/common/JwtUtils.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/common/JwtUtils.java	(date 1600220836225)
++++ src/main/java/com/xingjob/sbootxjob/common/JwtUtils.java	(date 1600220836225)
+@@ -0,0 +1,35 @@
++package com.xingjob.sbootxjob.common;
++
++import com.auth0.jwt.JWT;
++import com.auth0.jwt.JWTCreator;
++import com.auth0.jwt.algorithms.Algorithm;
++import com.auth0.jwt.interfaces.DecodedJWT;
++
++import java.util.Calendar;
++import java.util.Map;
++
++public class JwtUtils {
++
++    private static final String SING = "5435UFJNDFUFF98";
++
++    public static String getToken(Map<String,String> map){
++        Calendar instance = Calendar.getInstance();
++        instance.add(Calendar.YEAR,35);  //设置令牌过期时间
++
++        //创建 jwt builder
++        JWTCreator.Builder builder= JWT.create();
++        //payload
++        map.forEach((k,v)->{
++            builder.withClaim(k,v);
++        });
++
++        String token = builder.withExpiresAt(instance.getTime())//指定过期时间
++                .sign(Algorithm.HMAC256(SING));
++
++        return token;
++    }
++    //验证token
++    public static DecodedJWT verify(String token){
++        return JWT.require(Algorithm.HMAC256(SING)).build().verify(token);
++    }
++}
+Index: src/main/java/com/xingjob/sbootxjob/mapper/xjJobmapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/mapper/xjJobmapper.java	(date 1600322838049)
++++ src/main/java/com/xingjob/sbootxjob/mapper/xjJobmapper.java	(date 1600322838049)
+@@ -0,0 +1,10 @@
++package com.xingjob.sbootxjob.mapper;
++
++import com.baomidou.mybatisplus.core.mapper.BaseMapper;
++import com.xingjob.sbootxjob.entity.xingjobJob;
++import org.springframework.stereotype.Repository;
++
++@Repository
++public interface xjJobmapper extends BaseMapper<xingjobJob> {
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/entity/xingjobCompany.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/entity/xingjobCompany.java	(date 1600170952617)
++++ src/main/java/com/xingjob/sbootxjob/entity/xingjobCompany.java	(date 1600170952617)
+@@ -0,0 +1,36 @@
++package com.xingjob.sbootxjob.entity;
++
++import com.baomidou.mybatisplus.annotation.FieldFill;
++import com.baomidou.mybatisplus.annotation.IdType;
++import com.baomidou.mybatisplus.annotation.TableField;
++import com.baomidou.mybatisplus.annotation.TableId;
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++import java.util.Date;
++
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++public class xingjobCompany {
++    @TableId(value="cpnyid",type= IdType.AUTO)
++    private Long cpnyid;
++    private Long uid;
++    private String companyname;
++    private String companyregnum;
++    private String userposition;
++    private String companyaddress;
++    private String industry;
++    private String companyintro;
++    private String licencepic;
++    private String licencepic2;
++    private String email;
++    @TableField(fill= FieldFill.INSERT)
++    private Date addTime;
++    @TableField(fill =FieldFill.INSERT_UPDATE)
++    private Date updateTime;
++
++
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/entity/xingjobUser.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/entity/xingjobUser.java	(date 1600170387755)
++++ src/main/java/com/xingjob/sbootxjob/entity/xingjobUser.java	(date 1600170387755)
+@@ -0,0 +1,40 @@
++package com.xingjob.sbootxjob.entity;
++
++import com.baomidou.mybatisplus.annotation.FieldFill;
++import com.baomidou.mybatisplus.annotation.IdType;
++import com.baomidou.mybatisplus.annotation.TableField;
++import com.baomidou.mybatisplus.annotation.TableId;
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++import java.time.LocalDate;
++import java.time.LocalDateTime;
++import java.util.Date;
++
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++public class xingjobUser {
++    @TableId(value="uid",type= IdType.AUTO)
++    private Long uid;
++    private String username;
++    private String password;
++    private Integer gender;
++    private LocalDate birthday;
++    private LocalDateTime lastLoginTime;
++    private String lastLoginIp;
++    private Byte userLevel;
++    private String nickname;
++    private String mobile;
++    private String avatar;
++    private String weixinOpenid;
++    private String sessionKey;
++    private Byte status;
++    @TableField(fill= FieldFill.INSERT)
++    private Date addTime;
++    @TableField(fill =FieldFill.INSERT_UPDATE)
++    private Date updateTime;
++    private Boolean deleted;
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/service/xjJobService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjJobService.java	(date 1600322838149)
++++ src/main/java/com/xingjob/sbootxjob/service/xjJobService.java	(date 1600322838149)
+@@ -0,0 +1,7 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.extension.service.IService;
++import com.xingjob.sbootxjob.entity.xingjobJob;
++
++public interface xjJobService extends IService<xingjobJob> {
++}
+Index: src/test/java/com/sbootxjob/demo/DemoApplicationTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/com/sbootxjob/demo/DemoApplicationTests.java	(date 1600145625529)
++++ src/test/java/com/sbootxjob/demo/DemoApplicationTests.java	(date 1600145625529)
+@@ -0,0 +1,13 @@
++package com.sbootxjob.demo;
++
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.test.context.SpringBootTest;
++
++@SpringBootTest
++class DemoApplicationTests {
++
++    @Test
++    void contextLoads() {
++    }
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/service/xjJobServiceImpli.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjJobServiceImpli.java	(date 1600322838204)
++++ src/main/java/com/xingjob/sbootxjob/service/xjJobServiceImpli.java	(date 1600322838204)
+@@ -0,0 +1,12 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
++import com.xingjob.sbootxjob.entity.xingjobJob;
++import com.xingjob.sbootxjob.mapper.xjJobmapper;
++import org.springframework.stereotype.Service;
++
++@Service
++public class xjJobServiceImpli extends ServiceImpl<xjJobmapper, xingjobJob> implements xjJobService{
++
++
++}
+Index: src/main/resources/application.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>GBK
+===================================================================
+--- src/main/resources/application.properties	(date 1600178593825)
++++ src/main/resources/application.properties	(date 1600178593825)
+@@ -0,0 +1,17 @@
++spring.datasource.username=root
++spring.datasource.password=a4207041138
++spring.datasource.url=jdbc:mysql://localhost:3306/xingjob?useSSL=false&userUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
++spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
++server.port=8011
++
++
++#返回JSON的全局时间格式
++spring.jackson.date-format=yyyy-MM-dd HH:mm:ss
++spring.jackson.time-zone=GMT+8
++
++
++#阿里对象存储配置
++aliyun.oss.file.endpoint=oss-cn-beijing.aliyuncs.com
++aliyun.oss.file.keyid=LTAI4G5CV5x6zpwwyH3zVwVK
++aliyun.oss.file.keysecret=wwrKfn8IUotIOtKSUn2xgo4kKkIgWf
++aliyun.oss.file.bucketname=xingbusiness
+Index: src/main/java/com/xingjob/sbootxjob/service/xjUserServiceImpli.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjUserServiceImpli.java	(date 1600220857498)
++++ src/main/java/com/xingjob/sbootxjob/service/xjUserServiceImpli.java	(date 1600220857498)
+@@ -0,0 +1,41 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
++import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
++import com.xingjob.sbootxjob.common.JwtUtils;
++import com.xingjob.sbootxjob.entity.xingjobUser;
++import com.xingjob.sbootxjob.mapper.xjUsermapper;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.stereotype.Service;
++import org.springframework.util.StringUtils;
++
++import java.util.HashMap;
++import java.util.Map;
++
++@Service
++public class xjUserServiceImpli extends ServiceImpl<xjUsermapper, xingjobUser> implements xjUserService {
++    @Autowired
++    private xjUserService xjuserservice;
++
++    //登录方法
++    @Override
++    public String login (xingjobUser xingjuser){
++        String weixin_openid = xingjuser.getWeixinOpenid();
++        //OPENID非空判断
++        if(StringUtils.isEmpty(weixin_openid)){ }
++        //判断openid是否正确
++        QueryWrapper<xingjobUser> wrapper = new QueryWrapper<>();
++        wrapper.eq("weixin_openid",weixin_openid);
++        xingjobUser openidMember = baseMapper.selectOne(wrapper);
++        if(openidMember == null){
++            boolean save =  xjuserservice.save(xingjuser);
++        }
++        //通过mapper再次遍历wrapper 不然会报空指针异常
++        xingjobUser secondopenidMember = baseMapper.selectOne(wrapper);
++        //生成token ,使用JWT
++        Map<String,String> payload = new HashMap<>();
++        payload.put("uid",secondopenidMember.getUid().toString());
++        String token = JwtUtils.getToken(payload);
++        return token;
++    }
++}
+Index: src/main/java/com/xingjob/sbootxjob/service/xjUserService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjUserService.java	(date 1600220274314)
++++ src/main/java/com/xingjob/sbootxjob/service/xjUserService.java	(date 1600220274314)
+@@ -0,0 +1,8 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.extension.service.IService;
++import com.xingjob.sbootxjob.entity.xingjobUser;
++
++public interface xjUserService extends IService<xingjobUser> {
++    String login(xingjobUser xingjuser);
++}
+Index: src/main/java/com/xingjob/sbootxjob/controller/xjApplicationController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/controller/xjApplicationController.java	(date 1600576217817)
++++ src/main/java/com/xingjob/sbootxjob/controller/xjApplicationController.java	(date 1600576217817)
+@@ -0,0 +1,55 @@
++package com.xingjob.sbootxjob.controller;
++
++
++import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
++import com.xingjob.sbootxjob.common.R;
++import com.xingjob.sbootxjob.entity.xingjobApplication;
++import com.xingjob.sbootxjob.entity.xingjobJob;
++import com.xingjob.sbootxjob.entity.xingjobResume;
++import com.xingjob.sbootxjob.mapper.xjApplicationmapper;
++import com.xingjob.sbootxjob.service.xjApplicationService;
++import org.mybatis.spring.annotation.MapperScan;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.web.bind.annotation.*;
++
++import java.util.List;
++
++@RestController
++@RequestMapping("/xjob/application")
++@MapperScan("com.xingjob.sbootxjob.mapper")
++@CrossOrigin
++public class xjApplicationController {
++    @Autowired
++    private xjApplicationmapper xjapplicationmapper;
++    @Autowired
++    private xjApplicationService xjapplicationservice;
++
++    //增加申请
++    @PostMapping("addxjApplication")
++    public R addxjJob(@RequestBody xingjobApplication xingjobapplication){
++        boolean save = xjapplicationservice.save(xingjobapplication);
++        if(save){
++            return R.ok();
++        }else {
++            return R.error();
++        }
++    }
++
++    //根据jobid查询application
++    @GetMapping("queryappliction/{jobid}")
++    public R getrequirement(@PathVariable long jobid){
++        QueryWrapper<xingjobApplication> wrapper = new QueryWrapper<>();
++        wrapper.eq("jobid",jobid);
++        List<xingjobApplication> queryappliction = xjapplicationmapper.selectList(wrapper);
++        return R.ok().data("queryappliction",queryappliction);
++    }
++
++    //根据uid查询application
++    @GetMapping("uidqueryappliction/{uid}")
++    public R getsecondrequirement(@PathVariable long uid){
++        QueryWrapper<xingjobApplication> wrapper = new QueryWrapper<>();
++        wrapper.eq("uid",uid);
++        List<xingjobApplication> queryappliction = xjapplicationmapper.selectList(wrapper);
++        return R.ok().data("uidqueryappliction",queryappliction);
++    }
++}
+Index: src/main/java/com/xingjob/sbootxjob/service/xjApplicationServiceImpli.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjApplicationServiceImpli.java	(date 1600572825208)
++++ src/main/java/com/xingjob/sbootxjob/service/xjApplicationServiceImpli.java	(date 1600572825208)
+@@ -0,0 +1,10 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
++import com.xingjob.sbootxjob.entity.xingjobApplication;
++import com.xingjob.sbootxjob.mapper.xjApplicationmapper;
++import org.springframework.stereotype.Service;
++
++@Service
++public class xjApplicationServiceImpli extends ServiceImpl<xjApplicationmapper, xingjobApplication> implements xjApplicationService {
++}
+Index: src/main/java/com/xingjob/sbootxjob/service/xjApplicationService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjApplicationService.java	(date 1600572825275)
++++ src/main/java/com/xingjob/sbootxjob/service/xjApplicationService.java	(date 1600572825275)
+@@ -0,0 +1,7 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.extension.service.IService;
++import com.xingjob.sbootxjob.entity.xingjobApplication;
++
++public interface xjApplicationService extends IService<xingjobApplication> {
++}
+Index: src/main/java/com/xingjob/sbootxjob/mapper/xjApplicationmapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/mapper/xjApplicationmapper.java	(date 1600572825153)
++++ src/main/java/com/xingjob/sbootxjob/mapper/xjApplicationmapper.java	(date 1600572825153)
+@@ -0,0 +1,9 @@
++package com.xingjob.sbootxjob.mapper;
++
++import com.baomidou.mybatisplus.core.mapper.BaseMapper;
++import com.xingjob.sbootxjob.entity.xingjobApplication;
++import org.springframework.stereotype.Repository;
++
++@Repository
++public interface xjApplicationmapper extends BaseMapper<xingjobApplication> {
++}
+Index: src/main/java/com/xingjob/sbootxjob/config/MyMetaObjectHandler.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/config/MyMetaObjectHandler.java	(date 1600224542951)
++++ src/main/java/com/xingjob/sbootxjob/config/MyMetaObjectHandler.java	(date 1600224542951)
+@@ -0,0 +1,21 @@
++package com.xingjob.sbootxjob.config;
++
++import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
++import org.apache.ibatis.reflection.MetaObject;
++import org.springframework.stereotype.Component;
++
++import java.util.Date;
++
++@Component
++public class MyMetaObjectHandler implements MetaObjectHandler {
++    @Override
++    public void insertFill(MetaObject metaObject) {
++        this.setFieldValByName("addTime",new Date(),metaObject);
++        this.setFieldValByName("updateTime",new Date(),metaObject);
++    }
++
++    @Override
++    public void updateFill(MetaObject metaObject) {
++        this.setFieldValByName("updateTime",new Date(),metaObject);
++    }
++}
+Index: src/main/java/com/xingjob/sbootxjob/entity/xingjobApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/entity/xingjobApplication.java	(date 1600573531587)
++++ src/main/java/com/xingjob/sbootxjob/entity/xingjobApplication.java	(date 1600573531587)
+@@ -0,0 +1,25 @@
++package com.xingjob.sbootxjob.entity;
++
++
++import com.baomidou.mybatisplus.annotation.FieldFill;
++import com.baomidou.mybatisplus.annotation.TableField;
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++import java.util.Date;
++
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++public class xingjobApplication {
++    private Long applicationid;
++    private Long jobid;
++    private Long uid;
++    private String nickname;
++    private String avatar;
++    @TableField(fill= FieldFill.INSERT)
++    private Date addTime;
++    @TableField(fill =FieldFill.INSERT_UPDATE)
++    private Date updateTime;
++}
+Index: src/main/java/com/xingjob/sbootxjob/controller/xjResumeController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/controller/xjResumeController.java	(date 1600568700162)
++++ src/main/java/com/xingjob/sbootxjob/controller/xjResumeController.java	(date 1600568700162)
+@@ -0,0 +1,64 @@
++package com.xingjob.sbootxjob.controller;
++
++
++import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
++import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
++import com.xingjob.sbootxjob.common.R;
++import com.xingjob.sbootxjob.entity.xingjobResume;
++import com.xingjob.sbootxjob.mapper.xjResumemapper;
++import com.xingjob.sbootxjob.service.xjResumeService;
++import org.mybatis.spring.annotation.MapperScan;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.web.bind.annotation.*;
++
++import java.util.List;
++
++@RestController
++@RequestMapping("/xjob/resume")
++@MapperScan("com.xingjob.sbootxjob.mapper")
++@CrossOrigin
++public class xjResumeController {
++    @Autowired
++    private xjResumemapper xjresumemapper;
++    @Autowired
++    private xjResumeService xjresumeservice;
++
++
++    //添加简历
++    @PostMapping("addresume")
++    public R addresume(@RequestBody xingjobResume xjresume){
++        boolean save = xjresumeservice.save(xjresume);
++        if(save){
++            return R.ok();
++        }else {
++            return R.error();
++        }
++    }
++
++    //分页简历查询
++    @GetMapping("pageresume/{resumestatus}/{current}/{limit}")
++    public R pageListJob(
++            @PathVariable byte resumestatus,
++            @PathVariable long current,
++            @PathVariable long limit){
++        Page<xingjobResume> pageRequirement = new Page<>(current,limit);
++        QueryWrapper<xingjobResume> wrapper = new QueryWrapper<>();
++        wrapper.eq("resumestatus",resumestatus);
++        wrapper.orderByDesc("resumeid");
++        xjresumeservice.page(pageRequirement,wrapper);
++        long total = pageRequirement.getTotal();
++        List<xingjobResume> records = pageRequirement.getRecords();
++//        Collections.reverse(records);//集合翻转顺序
++        return R.ok().data("total",total).data("records",records);
++    }
++
++    //根据用户ID查询简历
++    @GetMapping("queryresume/{uid}")
++    public R getrequirement(@PathVariable long uid){
++        QueryWrapper<xingjobResume> wrapper = new QueryWrapper<>();
++        wrapper.eq("uid",uid);
++        List<xingjobResume> queryresume = xjresumemapper.selectList(wrapper);
++        return R.ok().data("idqueryresume",queryresume);
++
++    }
++}
+Index: src/main/java/com/xingjob/sbootxjob/service/xjResumeServiceImpli.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjResumeServiceImpli.java	(date 1600449547699)
++++ src/main/java/com/xingjob/sbootxjob/service/xjResumeServiceImpli.java	(date 1600449547699)
+@@ -0,0 +1,10 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
++import com.xingjob.sbootxjob.entity.xingjobResume;
++import com.xingjob.sbootxjob.mapper.xjResumemapper;
++import org.springframework.stereotype.Service;
++
++@Service
++public class xjResumeServiceImpli extends ServiceImpl<xjResumemapper, xingjobResume> implements xjResumeService {
++}
+Index: src/main/java/com/xingjob/sbootxjob/service/xjResumeService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/service/xjResumeService.java	(date 1600449547782)
++++ src/main/java/com/xingjob/sbootxjob/service/xjResumeService.java	(date 1600449547782)
+@@ -0,0 +1,7 @@
++package com.xingjob.sbootxjob.service;
++
++import com.baomidou.mybatisplus.extension.service.IService;
++import com.xingjob.sbootxjob.entity.xingjobResume;
++
++public interface xjResumeService extends IService<xingjobResume> {
++}
+Index: src/main/java/com/xingjob/sbootxjob/mapper/xjResumemapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/mapper/xjResumemapper.java	(date 1600449547723)
++++ src/main/java/com/xingjob/sbootxjob/mapper/xjResumemapper.java	(date 1600449547723)
+@@ -0,0 +1,9 @@
++package com.xingjob.sbootxjob.mapper;
++
++import com.baomidou.mybatisplus.core.mapper.BaseMapper;
++import com.xingjob.sbootxjob.entity.xingjobResume;
++import org.springframework.stereotype.Repository;
++
++@Repository
++public interface xjResumemapper extends BaseMapper<xingjobResume> {
++}
+Index: src/main/java/com/xingjob/sbootxjob/controller/xjUserController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/controller/xjUserController.java	(date 1600233714630)
++++ src/main/java/com/xingjob/sbootxjob/controller/xjUserController.java	(date 1600233714630)
+@@ -0,0 +1,152 @@
++package com.xingjob.sbootxjob.controller;
++
++//import com.alibaba.fastjson.JSONObject;
++import com.auth0.jwt.exceptions.AlgorithmMismatchException;
++import com.auth0.jwt.exceptions.SignatureVerificationException;
++import com.auth0.jwt.exceptions.TokenExpiredException;
++import com.auth0.jwt.interfaces.DecodedJWT;
++import com.xingjob.sbootxjob.common.JwtUtils;
++import com.xingjob.sbootxjob.common.R;
++import com.xingjob.sbootxjob.entity.xingjobUser;
++import com.xingjob.sbootxjob.mapper.xjUsermapper;
++import com.xingjob.sbootxjob.service.xjUserService;
++//import org.bouncycastle.jce.provider.BouncyCastleProvider;
++//import org.bouncycastle.util.encoders.Base64;
++import org.mybatis.spring.annotation.MapperScan;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.web.bind.annotation.*;
++
++//import javax.crypto.Cipher;
++//import javax.crypto.spec.IvParameterSpec;
++//import javax.crypto.spec.SecretKeySpec;
++//import javax.servlet.http.HttpServletRequest;
++//import java.security.AlgorithmParameters;
++//import java.security.Security;
++//import java.util.Arrays;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++
++@RestController
++@RequestMapping("/xjob/user")
++@MapperScan("com.xingjob.sbootxjob.mapper")
++@CrossOrigin
++public class xjUserController {
++    @Autowired
++    private xjUsermapper xjusermapper;
++    @Autowired
++    private xjUserService xjuserservice;
++
++    @GetMapping("/findalluser")
++    public R findAllUser(){
++        List<xingjobUser> list = xjusermapper.selectList(null);
++        return R.ok().data("items",list);
++    }
++
++    @PostMapping("addxjUser")
++    public R addxjUser(@RequestBody xingjobUser xingjobuser ){
++        boolean save = xjuserservice.save(xingjobuser);
++        if(save){
++            return R.ok();
++        }else {
++            return R.error();
++        }
++    }
++    //根据用户ID进行查询
++    @GetMapping("getuserinfo/{uid}")
++    public R getUser(@PathVariable String uid){
++        xingjobUser userinfo = xjuserservice.getById(uid);
++        return R.ok().data("userinfo",userinfo);
++    }
++
++    //用户修改功能
++    @PostMapping("updateuserinfo")
++    public R updateuserinfo(@RequestBody xingjobUser updateuserinfo ){
++        boolean flag = xjuserservice.updateById(updateuserinfo);
++        if(flag){
++            return R.ok();
++        }else {
++            return R.error();
++        }
++    }
++
++    //登录
++    @PostMapping("login")
++    public R userLogin(@RequestBody xingjobUser xingjuser){
++       String token =  xjuserservice.login(xingjuser);
++        return R.ok().data("token",token);
++    }
++
++    //根据token获得用户信息
++    @GetMapping("/infobytoken/{token}")
++    public R getInfoByToken(@PathVariable String token){
++        Map<String,Object> map = new HashMap<>();
++        try{
++            DecodedJWT verify = JwtUtils.verify(token);
++
++            map.put("uid",verify.getClaim("uid").asString());
++            return R.ok().data("map",map);
++        }catch (SignatureVerificationException e){
++            e.printStackTrace();
++            map.put("msg","no");
++        }catch (TokenExpiredException e){
++            e.printStackTrace();
++            map.put("msg","no");
++        }catch (AlgorithmMismatchException e){
++            e.printStackTrace();
++            map.put("msg","no");
++        }catch (Exception e){
++            e.printStackTrace();
++            map.put("msg","no");
++        }
++        map.put("state",false);
++        return R.ok().data("map",map);
++    }
++
++
++//    @PostMapping("/miniGetPhone")
++//    @ResponseBody
++//    public R miniGetPhone(HttpServletRequest request, String encryptedData, String iv, String session_key)
++//    {
++//        JSONObject obj=getPhoneNumber(session_key,encryptedData,iv);//解密电话号码
++//        String sphone=obj.get("phoneNumber").toString();
++//        if(obj.isEmpty() && sphone==null){
++//            return R.error().data("手机号解密失败！",400);
++//        }else {
++//            return R.ok().data("uphone",sphone);
++//        }
++//    }
++
++    //解析电话号码
++//    public JSONObject getPhoneNumber(String session_key, String encryptedData, String iv) {
++//        byte[] dataByte = Base64.decode(encryptedData);
++//        byte[] keyByte = Base64.decode(session_key);
++//        byte[] ivByte = Base64.decode(iv);
++//        try {
++//            int base = 16;
++//            if (keyByte.length % base != 0) {
++//                int groups = keyByte.length / base + (keyByte.length % base != 0 ? 1 : 0);
++//                byte[] temp = new byte[groups * base];
++//                Arrays.fill(temp, (byte) 0);
++//                System.arraycopy(keyByte, 0, temp, 0, keyByte.length);
++//                keyByte = temp;
++//            }
++//            // 初始化
++//            Security.addProvider(new BouncyCastleProvider());
++//            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
++//            SecretKeySpec spec = new SecretKeySpec(keyByte, "AES");
++//            AlgorithmParameters parameters = AlgorithmParameters.getInstance("AES");
++//            parameters.init(new IvParameterSpec(ivByte));
++//            cipher.init(Cipher.DECRYPT_MODE, spec, parameters);
++//            byte[] resultByte = cipher.doFinal(dataByte);
++//            if (null != resultByte && resultByte.length > 0) {
++//                String result = new String(resultByte, "UTF-8");
++//                return JSONObject.parseObject(result);
++//            }
++//        } catch (Exception e) {
++//            e.printStackTrace();
++//        }
++//        return null;
++//
++//    }
++}
+Index: src/main/java/com/xingjob/sbootxjob/entity/xingjobResume.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/entity/xingjobResume.java	(date 1600529325414)
++++ src/main/java/com/xingjob/sbootxjob/entity/xingjobResume.java	(date 1600529325414)
+@@ -0,0 +1,42 @@
++package com.xingjob.sbootxjob.entity;
++
++import com.baomidou.mybatisplus.annotation.FieldFill;
++import com.baomidou.mybatisplus.annotation.IdType;
++import com.baomidou.mybatisplus.annotation.TableField;
++import com.baomidou.mybatisplus.annotation.TableId;
++import lombok.AllArgsConstructor;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++import java.util.Date;
++
++
++@Data
++@AllArgsConstructor
++@NoArgsConstructor
++public class xingjobResume {
++    @TableId(value="resumeid",type= IdType.AUTO)
++    private Long resumeid;
++    private Long uid;
++    private String realname;
++    private Byte gender;
++    private String email;
++    private String resumeavatar;
++    private String education;
++    private String jobstatus;
++    private String age;
++    private String college;
++    private String selfintro;
++    private Long expectsalary;
++    private String jobexperience;
++    private String project;
++    private String educationexperience;
++    private String nativeplace;
++    private String major;
++    private String mobile;
++    @TableField(fill= FieldFill.INSERT)
++    private Date addTime;
++    @TableField(fill =FieldFill.INSERT_UPDATE)
++    private Date updateTime;
++    private Byte resumestatus;
++}
+Index: src/main/java/com/xingjob/sbootxjob/mapper/xjUsermapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/mapper/xjUsermapper.java	(date 1600177299145)
++++ src/main/java/com/xingjob/sbootxjob/mapper/xjUsermapper.java	(date 1600177299145)
+@@ -0,0 +1,10 @@
++package com.xingjob.sbootxjob.mapper;
++
++import com.baomidou.mybatisplus.core.mapper.BaseMapper;
++import com.xingjob.sbootxjob.entity.xingjobUser;
++import org.springframework.stereotype.Repository;
++
++@Repository
++public interface xjUsermapper extends BaseMapper<xingjobUser> {
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/config/xjconfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/config/xjconfig.java	(date 1600177165121)
++++ src/main/java/com/xingjob/sbootxjob/config/xjconfig.java	(date 1600177165121)
+@@ -0,0 +1,54 @@
++package com.xingjob.sbootxjob.config;
++
++import com.baomidou.mybatisplus.core.injector.ISqlInjector;
++import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
++import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
++import com.google.common.base.Predicates;
++import org.mybatis.spring.annotation.MapperScan;
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.Configuration;
++import springfox.documentation.builders.ApiInfoBuilder;
++import springfox.documentation.builders.PathSelectors;
++import springfox.documentation.service.ApiInfo;
++import springfox.documentation.service.Contact;
++import springfox.documentation.spi.DocumentationType;
++import springfox.documentation.spring.web.plugins.Docket;
++import springfox.documentation.swagger2.annotations.EnableSwagger2;
++
++@Configuration
++@MapperScan("com.xingjob.sbootxjob.mapper")
++@EnableSwagger2
++public class xjconfig {
++    /**     * mybatis-plus分页插件     */
++    @Bean
++    public PaginationInterceptor paginationInterceptor() {
++        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
++        return paginationInterceptor;    }
++
++    //逻辑删除
++    @Bean
++    public ISqlInjector sqlInjector() {
++        return new LogicSqlInjector();
++    }
++
++    //swagger
++    @Bean
++    public Docket docket(){
++        return new Docket(DocumentationType.SWAGGER_2)
++                .groupName("webapi")
++                .apiInfo(webapiinfo())
++                .select()
++                .paths(Predicates.not(PathSelectors.regex("/admin/.*")))
++                .paths(Predicates.not(PathSelectors.regex("/error.*")))
++                .build();
++    }
++
++    private ApiInfo webapiinfo(){
++        return new ApiInfoBuilder()
++                .title("中文API文档")
++                .description("接口定义")
++                .version("1.0")
++                .contact(new Contact("xbusiness","http//xb123465898.com","1234567778@qq.com"))
++                .build();
++    }
++}
+Index: src/main/java/com/xingjob/sbootxjob/controller/xjJobController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/controller/xjJobController.java	(date 1600323315299)
++++ src/main/java/com/xingjob/sbootxjob/controller/xjJobController.java	(date 1600323315299)
+@@ -0,0 +1,63 @@
++package com.xingjob.sbootxjob.controller;
++
++import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
++import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
++import com.xingjob.sbootxjob.common.R;
++import com.xingjob.sbootxjob.entity.xingjobJob;
++import com.xingjob.sbootxjob.mapper.xjJobmapper;
++import com.xingjob.sbootxjob.service.xjJobService;
++import org.mybatis.spring.annotation.MapperScan;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.web.bind.annotation.*;
++
++import java.util.List;
++
++@RestController
++@RequestMapping("/xjob/job")
++@MapperScan("com.xingjob.sbootxjob.mapper")
++@CrossOrigin
++public class xjJobController {
++    @Autowired
++    private xjJobmapper xjJobmapper;
++    @Autowired
++    private xjJobService xjjobservice;
++
++    //增加职位
++    @PostMapping("addxjJob")
++    public R addxjJob(@RequestBody xingjobJob xingjobjob){
++        boolean save = xjjobservice.save(xingjobjob);
++        if(save){
++            return R.ok();
++        }else {
++            return R.error();
++        }
++    }
++
++    //分页职位查询
++    @GetMapping("pagejob/{current}/{limit}")
++    public R pageListJob(@PathVariable long current,
++                                 @PathVariable long limit){
++        Page<xingjobJob> pageRequirement = new Page<>(current,limit);
++        QueryWrapper<xingjobJob> wrapper = new QueryWrapper<>();
++        wrapper.orderByDesc("jobid");
++        xjjobservice.page(pageRequirement,wrapper);
++        long total = pageRequirement.getTotal();
++        List<xingjobJob> records = pageRequirement.getRecords();
++//        Collections.reverse(records);//集合翻转顺序
++        return R.ok().data("total",total).data("records",records);
++    }
++
++    //根据用户ID查询职位
++    @GetMapping("queryjob/{uid}")
++    public R getrequirement(@PathVariable long uid){
++        QueryWrapper<xingjobJob> wrapper = new QueryWrapper<>();
++        wrapper.eq("uid",uid);
++        List<xingjobJob> queryjob = xjJobmapper.selectList(wrapper);
++        return R.ok().data("idqueryjob",queryjob);
++    }
++
++
++
++
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/common/ResultCode.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/common/ResultCode.java	(date 1600177061404)
++++ src/main/java/com/xingjob/sbootxjob/common/ResultCode.java	(date 1600177061404)
+@@ -0,0 +1,6 @@
++package com.xingjob.sbootxjob.common;
++
++public interface ResultCode {
++    public static Integer SUCCESS = 20000;
++    public static Integer ERROR = 20001;
++}
+Index: src/main/java/com/xingjob/sbootxjob/SbootxjobApplication.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/SbootxjobApplication.java	(date 1600323364410)
++++ src/main/java/com/xingjob/sbootxjob/SbootxjobApplication.java	(date 1600323364410)
+@@ -0,0 +1,15 @@
++package com.xingjob.sbootxjob;
++
++import org.mybatis.spring.annotation.MapperScan;
++import org.springframework.boot.SpringApplication;
++import org.springframework.boot.autoconfigure.SpringBootApplication;
++
++@SpringBootApplication
++@MapperScan("com.xingjob.sbootxjob.mapper")
++public class SbootxjobApplication {
++
++    public static void main(String[] args) {
++        SpringApplication.run(SbootxjobApplication.class, args);
++    }
++
++}
+Index: src/main/java/com/xingjob/sbootxjob/common/R.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/xingjob/sbootxjob/common/R.java	(date 1600177021254)
++++ src/main/java/com/xingjob/sbootxjob/common/R.java	(date 1600177021254)
+@@ -0,0 +1,56 @@
++package com.xingjob.sbootxjob.common;
++
++import lombok.Data;
++
++import java.util.HashMap;
++import java.util.Map;
++
++@Data
++public class R {
++    private Boolean success;
++    private Integer code;
++    private String message;
++    private Map<String,Object> data = new HashMap<String,Object>();
++
++    //构造方法私有
++    private R(){}
++
++    // 成功静态方法
++    public static R ok(){
++        R r = new R();
++        r.setSuccess(true);
++        r.setCode(ResultCode.SUCCESS);
++        r.setMessage("成功");
++        return r;
++    }
++
++    // 失败静态方法
++    public static R error(){
++        R r = new R();
++        r.setSuccess(false);
++        r.setCode(ResultCode.ERROR);
++        r.setMessage("失败");
++        return r;
++    }
++
++    public R success(Boolean success){
++        this.setSuccess(success);
++        return this;
++    }
++    public R message(String message){
++        this.setMessage(message);
++        return this;
++    }
++    public R code(Integer code){
++        this.setCode(code);
++        return this;
++    }
++    public R data(String key,Object value){
++        this.data.put(key,value);
++        return this;
++    }
++    public R data(Map<String,Object> map){
++        this.setData(map);
++        return this;
++    }
++}
