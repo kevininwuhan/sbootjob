@@ -52,7 +52,7 @@ public class xjResumeController {
         return R.ok().data("total",total).data("records",records);
     }
 
-    //根据用户ID查询简历
+    //根据用户ID查询简历d
     @GetMapping("queryresume/{uid}")
     public R getrequirement(@PathVariable long uid){
         QueryWrapper<xingjobResume> wrapper = new QueryWrapper<>();
